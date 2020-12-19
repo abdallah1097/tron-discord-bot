@@ -200,6 +200,10 @@ def get_bedi_bot_channel_id(guild_id: int):
     return Guilds.find_one({'guild_id': guild_id})['channel_id']
 
 
+def get_verification_enabled(guild_id: int):
+    return Guilds.find_one({'guild_id': guild_id})['verification_enabled']
+
+
 def insert_quote(guild_id: int, quote: str, quoted_person: str):
     doc = {
         'quote': quote,
