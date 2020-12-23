@@ -70,8 +70,6 @@ async def on_reaction_add(reaction, user):
 
 # ------------------------------main-----------------------------
 
-init()
-
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 client.run(TOKEN)

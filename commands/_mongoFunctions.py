@@ -12,12 +12,14 @@ DATABASE_STRING = os.getenv("MONGO_DATABASE_STRING")
 mClient = None
 GuildInformation = None
 Guilds = None
+Guild_Cache = {}
 
 
 def init():
     global mClient
     global Guilds
     global GuildInformation
+    global Guild_Cache
 
     mClient = pymongo.MongoClient(CONNECTION_STRING)
 
@@ -28,10 +30,15 @@ def init():
     guild_list = list(Guilds.find({}))
 
     for guild in guild_list:
-        for key, value in guild.items():
-            if key == 'guild_id':
-                coll = GuildInformation["a" + str(value) + ".PendingVerificationUsers"]
-                coll.delete_many({})
+        Guild_Cache[str(guild['guild_id'])] = {}
+        Guild_Cache[str(guild['guild_id'])]['settings'] = guild
+
+        Guild_Cache[str(guild['guild_id'])]['due_dates'] = list(GuildInformation["a" + str(guild['guild_id']) + ".UpcomingDueDates"].find({}))
+
+        pending_verification_coll = GuildInformation["a" + str(guild['guild_id']) + ".PendingVerificationUsers"]
+        pending_verification_coll.delete_many({})
+
+    print(Guild_Cache)
 
 
 def is_uw_id_linked_to_verified_user(guild_id: int, uw_id):
