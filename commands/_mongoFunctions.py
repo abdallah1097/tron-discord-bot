@@ -139,24 +139,12 @@ def get_all_upcoming_due_dates(guild_id: int, stream: int, course):
     return list(coll.aggregate(pipeline))
 
 
-def get_list_of_courses(guild_id: int):
-    return Guilds.find_one({'guild_id': guild_id})['courses']
-
-
-def get_list_of_due_date_types(guild_id: int):
-    return Guilds.find_one({'guild_id': guild_id})['due_date_types']
-
-
-def get_list_of_streams(guild_id: int):
-    return Guilds.find_one({'guild_id': guild_id})['streams']
-
-
 def get_guilds_information():
     return list(Guilds.find({}))
 
 
-def get_due_date_channel_id(guild_id: int, stream: int):
-    return Guilds.find_one({'guild_id': guild_id})['stream_' + str(stream) + '_message_id']
+def get_guild_cache():
+    return Guild_Cache
 
 
 def remove_due_dates_passed(guild_id: int):
@@ -192,36 +180,8 @@ def set_last_announcement_time(guild_id: int, time: datetime.datetime):
     Guilds.update_one({'guild_id': guild_id}, {'$set': {'last_announcement_time': time}})
 
 
-def get_last_announcement_time(guild_id: int):
-    return Guilds.find_one({'guild_id': guild_id})['last_announcement_time']
-
-
-def get_birthday_role_string(guild_id: int):
-    return Guilds.find_one({'guild_id': guild_id})['birthday_role']
-
-
-def get_announcement_role_string(guild_id: int):
-    return Guilds.find_one({'guild_id': guild_id})['announcement_role']
-
-
-def get_bedi_bot_channel_id(guild_id: int):
-    return Guilds.find_one({'guild_id': guild_id})['channel_id']
-
-
-def get_announcement_quoted_person(guild_id: int):
-    return Guilds.find_one({'guild_id': guild_id})['announcement_quoted_person']
-
-
-def get_announcement_time(guild_id: int):
-    return Guilds.find_one({'guild_id': guild_id})['announcement_time']
-
-
-def get_admin_role(guild_id: int):
-    return Guilds.find_one({'guild_id': guild_id})['admin_role']
-
-
-def get_reaction_emoji(guild_id: int):
-    return Guilds.find_one({'guild_id': guild_id})['reaction_emoji']
+def get_settings(guild_id: int):
+    return Guild_Cache[guild_id]['settings']
 
 
 def insert_quote(guild_id: int, quote: str, quoted_person: str):
